@@ -1,8 +1,14 @@
+import random
+
+import datetime
 from ejercicio5 import create_population
 from ejercicio6 import evaluate_population
 from ejercicio7 import selection
 from ejercicio8 import crossover
 from ejercicio9 import mutate
+import coverage
+
+seed = int(datetime.datetime.now().timestamp())
 
 
 def genetic_algorithm():
@@ -13,7 +19,9 @@ def genetic_algorithm():
     best_individual, fitness_best_individual = min(
         evaluated_population.items(), key=lambda t: t[1]
     )
-    print(f'best_individual "{best_individual}" with score:  {fitness_best_individual}')
+    print(
+        f'{generation} best_individual "{best_individual}" with score:  {fitness_best_individual}'
+    )
 
     # Continuar mientras la cantidad de generaciones es menor que 1000
     # o no se haya encontrado un m\’inimo global
@@ -41,10 +49,17 @@ def genetic_algorithm():
             evaluated_population.items(), key=lambda t: t[1]
         )
         print(
-            f'best_individual "{best_individual}" with score:  {fitness_best_individual}'
+            f'{generation} best_individual "{best_individual}" with score:  {fitness_best_individual}'
         )
+    print(f"{seed} {generation} {fitness_best_individual}")
     return best_individual
 
 
 if __name__ == "__main__":
+    cov = coverage.Coverage(branch=True)
+    random.seed(seed)
+    print(seed)
+    cov.start()
     genetic_algorithm()
+    cov.stop()
+    cov.report()
