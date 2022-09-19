@@ -1,35 +1,33 @@
 from typing import Dict
 import sys
-#Inicializar mappings globales
 
-distances_true: Dict[int,int] = {}
-distances_false: Dict[int,int] = {}
+# Inicializar mappings globales
 
-def update_maps(condition_num,d_true,d_false):
+distances_true: Dict[int, int] = {}
+distances_false: Dict[int, int] = {}
+
+
+def update_maps(condition_num, d_true, d_false):
     global distances_true, distances_false
     if condition_num in distances_true.keys():
-        distances_true[condition_num]= min(
-            distances_true[condition_num],d_true
-        )
+        distances_true[condition_num] = min(distances_true[condition_num], d_true)
     else:
-        distances_true[condition_num]=d_true
+        distances_true[condition_num] = d_true
 
     if condition_num in distances_false.keys():
-        distances_false[condition_num]= min(
-            distances_false[condition_num],d_false
-        )
+        distances_false[condition_num] = min(distances_false[condition_num], d_false)
     else:
-        distances_false[condition_num]=d_false
+        distances_false[condition_num] = d_false
 
 
-def evaluate_condition(condition_num : int, op : str, lhs: int, rhs : int) -> bool:
+def evaluate_condition(condition_num: int, op: str, lhs: int, rhs: int) -> bool:
     if op == "Eq":
         if lhs == rhs:
             update_maps(condition_num, abs(lhs - rhs), 1)
         else:
             update_maps(condition_num, abs(lhs - rhs), 0)
         return lhs == rhs
-    
+
     if op == "Ne":
         if lhs == rhs:
             update_maps(condition_num, 1, abs(lhs - rhs))
@@ -41,26 +39,26 @@ def evaluate_condition(condition_num : int, op : str, lhs: int, rhs : int) -> bo
         if lhs < rhs:
             update_maps(condition_num, 0, rhs - lhs)
         else:
-            update_maps(condition_num, lhs - rhs +1, 0)
+            update_maps(condition_num, lhs - rhs + 1, 0)
         return lhs < rhs
 
     if op == "Gt":
         if lhs > rhs:
-            update_maps(condition_num, 0 ,lhs - rhs)
+            update_maps(condition_num, 0, lhs - rhs)
         else:
             update_maps(condition_num, rhs - lhs + 1, 0)
         return lhs > rhs
 
     if op == "Le":
         if lhs <= rhs:
-            update_maps(condition_num, 0 ,rhs - lhs + 1)
+            update_maps(condition_num, 0, rhs - lhs + 1)
         else:
             update_maps(condition_num, lhs - rhs, 0)
         return lhs <= rhs
 
     if op == "Ge":
         if lhs >= rhs:
-            update_maps(condition_num, 0, lhs - rhs+1)
+            update_maps(condition_num, 0, lhs - rhs + 1)
         else:
             update_maps(condition_num, rhs - lhs, 0)
         return lhs >= rhs
@@ -76,12 +74,13 @@ def evaluate_condition(condition_num : int, op : str, lhs: int, rhs : int) -> bo
 
 import unittest
 
+
 class TestCase(unittest.TestCase):
     def test_1(self):
         self.assertEqual(evaluate_condition(0, "Eq", 20, 10), False)
         self.assertEqual(distances_true[0], 10)
         self.assertEqual(distances_false[0], 0)
-    
+
     def test_2(self):
         self.assertEqual(evaluate_condition(1, "Eq", 20, 20), True)
         self.assertEqual(distances_true[1], 0)
@@ -133,7 +132,7 @@ class TestCase(unittest.TestCase):
         self.assertEqual(distances_false[10], 0)
 
     def test_12(self):
-        self.assertEqual(evaluate_condition(11, "In", 10, [1,2,3]), False)
+        self.assertEqual(evaluate_condition(11, "In", 10, [1, 2, 3]), False)
         self.assertEqual(distances_true[11], 7)
         self.assertEqual(distances_false[11], 0)
 

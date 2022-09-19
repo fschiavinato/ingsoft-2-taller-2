@@ -43,6 +43,7 @@ def genetic_algorithm():
         print(
             f'best_individual "{best_individual}" with score:  {fitness_best_individual}'
         )
+    return best_individual
 
 
 if __name__ == "__main__":
