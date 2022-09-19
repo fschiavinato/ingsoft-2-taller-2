@@ -1,5 +1,4 @@
 import random
-import unittest
 from ejercicio5 import chars
 
 

@@ -1,7 +1,5 @@
 import random
 from typing import Dict
-import ejercicio6
-import unittest
 
 
 def selection(evaluated_population: Dict[str, float], tournament_size):
@@ -12,10 +10,3 @@ def selection(evaluated_population: Dict[str, float], tournament_size):
     )
 
 
-class TestCase(unittest.TestCase):
-    def test_1(self):
-        fitness = ejercicio6.evaluate_population(
-            ["%AA", "%AU", "%UU", "Hello+Reader", ""]
-        )
-        best = selection(fitness, 1000)
-        self.assertEquals(best, "%AA")

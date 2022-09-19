@@ -1,6 +1,5 @@
 import random
 from typing import Tuple
-import unittest
 
 
 def crossover(parent1: str, parent2: str) -> Tuple[str, str]:
@@ -11,10 +10,3 @@ def crossover(parent1: str, parent2: str) -> Tuple[str, str]:
     return offspring1, offspring2
 
 
-class TestCase(unittest.TestCase):
-    def test1(self):
-        p = "aaaa"
-        m = "bbbb"
-        h1, h2 = crossover(p, m)
-        self.assertEqual(len(h1), 4)
-        self.assertEqual(len(h2), 4)
