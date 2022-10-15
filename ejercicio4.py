@@ -3,6 +3,8 @@ import ejercicio2
 
 
 def get_fitness_cgi_decode(s: str) -> float:
+    ejercicio2.distances_true = {}
+    ejercicio2.distances_false = {}
     try:
         cgi_decoded_instrumented(s)
     except:
@@ -15,7 +17,7 @@ def get_fitness_cgi_decode(s: str) -> float:
         branch_distance = ejercicio2.distances_true[max_branch]
 
     normalized_branch_distance = branch_distance / (branch_distance + 1)
-
+    
     return approach_level + normalized_branch_distance
 
 
