@@ -1,14 +1,8 @@
 import unittest
-import ejercicio2
 from ejercicio4 import get_fitness_cgi_decode
 
 
 class TestCase(unittest.TestCase):
-    def setUp(self) -> None:
-        ejercicio2.distances_true = {}
-        ejercicio2.distances_false = {}
-        return super().setUp()
-
     def test_1(self):
         self._assert("%AA", 0)
 
@@ -23,6 +17,9 @@ class TestCase(unittest.TestCase):
 
     def test_5(self):
         self._assert("", 4.5)
+
+    def test_6(self):
+        self._assert("%1+", 0.8333333333333334)
 
     def _assert(self, s, e):
         self.assertAlmostEqual(get_fitness_cgi_decode(s), e)

@@ -1,9 +1,7 @@
 import random
 import string
 
-chars = (
-    string.ascii_uppercase + string.ascii_lowercase + string.digits + "+" + "%" + " "
-)
+chars = string.printable
 
 
 def create_population(population_size: int):
