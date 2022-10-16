@@ -1,65 +1,91 @@
-import random
-
-import datetime
+import random, datetime
+import ejercicio2
+from ejercicio3 import cgi_decoded_instrumented
 from ejercicio5 import create_population
 from ejercicio6 import evaluate_population
 from ejercicio7 import selection
 from ejercicio8 import crossover
-from ejercicio9 import mutate
-import coverage
+from ejercicio9 import mutate 
 
 seed = int(datetime.datetime.now().timestamp())
 
-
 def genetic_algorithm():
+    population_size = 100
+    tournament_size = 5
+    p_crossover = 0.70
+    p_mutation = 0.20
+
     eps = 1e-5
     generation = 0
-    population = create_population(10)
+    population = create_population(population_size)
     evaluated_population = evaluate_population(population)
     best_individual, fitness_best_individual = min(
         evaluated_population.items(), key=lambda t: t[1]
     )
-    print(
-        f'{generation} best_individual "{best_individual}" with score:  {fitness_best_individual}'
-    )
+    printGenerationInfo(generation, best_individual, fitness_best_individual)
 
     # Continuar mientras la cantidad de generaciones es menor que 1000
-    # o no se haya encontrado un m\’inimo global
+    # o no se haya encontrado un minimo global
     while fitness_best_individual > eps and generation < 1000:
-        # Producir una nueva poblaci’on con el mismo tama˜no que
-        # la generaci’on anterior,usar selection,crossover y mutation
+        # Producir una nueva poblacion con el mismo tamanio que
+        # la generacion anterior, usar selection, crossover y mutation
         new_population = []
         for _ in range(len(population) // 2):
 
-            p, m = (selection(evaluated_population, 10) for _ in range(2))
-            h1, h2 = crossover(p, m)
-            h1 = mutate(h1)
-            h2 = mutate(h2)
+            p, m = (selection(evaluated_population, tournament_size) for _ in range(2))
+            h1, h2 = crossover(p, m) if random.random() <= p_crossover else (p, m)
+            h1 = mutate(h1, p_mutation)
+            h2 = mutate(h2, p_mutation)
             new_population.append(h1),
             new_population.append(h2)
 
-        # Una vez creada,reemplazar la poblaci’on anterior con la nueva
-        # poblacion
+        # Una vez creada, reemplazar la poblacion anterior con la nueva poblacion
         generation += 1
         population = new_population
 
-        # Evaluar la nueva poblaci’one imprimir el mejor valor de fitness
+        # Evaluar la nueva poblacion e imprimir el mejor valor de fitness
         evaluated_population = evaluate_population(population)
         best_individual, fitness_best_individual = min(
             evaluated_population.items(), key=lambda t: t[1]
         )
-        print(
-            f'{generation} best_individual "{best_individual}" with score:  {fitness_best_individual}'
-        )
-    print(f"{seed} {generation} {fitness_best_individual}")
+        printGenerationInfo(generation, best_individual, fitness_best_individual)
     return best_individual
+
+def printGenerationInfo(generation, best_individual, fitness_best_individual):
+    print(f'> Generation {generation}: best_individual "{best_individual}" with score: {fitness_best_individual}')
+
+def getBranchCoverage(individual):
+    ejercicio2.distances_true = {}
+    ejercicio2.distances_false = {}
+    try: 
+        cgi_decoded_instrumented(individual)
+    except:
+        pass
+    sumBranchesPassed = 0
+    for i in range(1, 4):
+        if i in ejercicio2.distances_true and ejercicio2.distances_true[i] == 0:
+            sumBranchesPassed += 1 
+        if i in ejercicio2.distances_false and ejercicio2.distances_false[i] == 0:
+            sumBranchesPassed += 1
+
+    if (4 in ejercicio2.distances_true 
+        and 5 in ejercicio2.distances_true 
+        and ejercicio2.distances_true[4] == 0  
+        and ejercicio2.distances_true[5] == 0):
+        sumBranchesPassed += 1
+
+    if (4 in ejercicio2.distances_false 
+        and 5 in ejercicio2.distances_false 
+        and ejercicio2.distances_false[4] == 0 
+        and ejercicio2.distances_false[5] == 0):
+            sumBranchesPassed += 1
+
+    return sumBranchesPassed/8
+    
 
 
 if __name__ == "__main__":
-    cov = coverage.Coverage(branch=True)
     random.seed(seed)
-    print(seed)
-    cov.start()
-    genetic_algorithm()
-    cov.stop()
-    cov.report()
+    print(f'Seed: {seed}')
+    best_individual = genetic_algorithm()
+    print(f'Best individual coverage: {getBranchCoverage(best_individual)*100}%')
