@@ -21,5 +21,17 @@ class TestCase(unittest.TestCase):
     def test_6(self):
         self._assert("%1+", 0.8333333333333334)
 
+    def test_7(self):
+        self._assert("%", 2.0)
+
+    def test_8(self):
+        self._assert("%1", 2.0)
+
+    def test_9(self):
+        self._assert("+", 3.5)
+
+    def test_10(self):
+        self._assert("+%1", 2.0)
+
     def _assert(self, s, e):
         self.assertAlmostEqual(get_fitness_cgi_decode(s), e)

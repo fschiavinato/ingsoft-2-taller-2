@@ -33,7 +33,7 @@ def genetic_algorithm():
         for _ in range(len(population) // 2):
 
             p, m = (selection(evaluated_population, tournament_size) for _ in range(2))
-            h1, h2 = crossover(p, m) if random.random() <= p_crossover else (p, m)
+            h1, h2 = crossover(p, m, p_crossover)
             h1 = mutate(h1, p_mutation)
             h2 = mutate(h2, p_mutation)
             new_population.append(h1),
@@ -61,6 +61,8 @@ def getBranchCoverage(individual):
         cgi_decoded_instrumented(individual)
     except:
         pass
+
+    # Mediante las distances podemos saber si pasaron por la branch
     sumBranchesPassed = 0
     for i in range(1, 4):
         if ejercicio2.distances_true.get(i) == 0:
@@ -68,6 +70,8 @@ def getBranchCoverage(individual):
         if ejercicio2.distances_false.get(i) == 0:
             sumBranchesPassed += 1
 
+    # Las ultimas dos condiciones como estan juntas por un AND 
+    # las tomamos como la misma branch
     if ejercicio2.distances_true.get(4) == 0 and ejercicio2.distances_true.get(5) == 0:
         sumBranchesPassed += 1
 
