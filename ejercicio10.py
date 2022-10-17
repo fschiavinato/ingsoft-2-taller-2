@@ -33,10 +33,10 @@ def genetic_algorithm():
         for _ in range(len(population) // 2):
 
             p, m = (selection(evaluated_population, tournament_size) for _ in range(2))
-            h1, h2 = crossover(p, m, p_crossover)
-            h1 = mutate(h1, p_mutation)
-            h2 = mutate(h2, p_mutation)
-            new_population.append(h1),
+            h1, h2 = crossover(p, m) if random.random() < p_crossover  else (p, m)
+            h1 = mutate(h1) if random.random() < p_mutation else h1
+            h2 = mutate(h2) if random.random() < p_mutation else h2
+            new_population.append(h1)
             new_population.append(h2)
 
         # Una vez creada, reemplazar la poblacion anterior con la nueva poblacion
