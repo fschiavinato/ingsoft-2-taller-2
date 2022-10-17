@@ -63,21 +63,15 @@ def getBranchCoverage(individual):
         pass
     sumBranchesPassed = 0
     for i in range(1, 4):
-        if i in ejercicio2.distances_true and ejercicio2.distances_true[i] == 0:
+        if ejercicio2.distances_true.get(i) == 0:
             sumBranchesPassed += 1 
-        if i in ejercicio2.distances_false and ejercicio2.distances_false[i] == 0:
+        if ejercicio2.distances_false.get(i) == 0:
             sumBranchesPassed += 1
 
-    if (4 in ejercicio2.distances_true 
-        and 5 in ejercicio2.distances_true 
-        and ejercicio2.distances_true[4] == 0  
-        and ejercicio2.distances_true[5] == 0):
+    if ejercicio2.distances_true.get(4) == 0 and ejercicio2.distances_true.get(5) == 0:
         sumBranchesPassed += 1
 
-    if (4 in ejercicio2.distances_false 
-        and 5 in ejercicio2.distances_false 
-        and ejercicio2.distances_false[4] == 0 
-        and ejercicio2.distances_false[5] == 0):
+    if ejercicio2.distances_false.get(4) == 0 and ejercicio2.distances_false.get(5) == 0:
             sumBranchesPassed += 1
 
     return sumBranchesPassed/8
